@@ -137,3 +137,24 @@ lsp_zero.extend_lspconfig({
   lsp_attach = lsp_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
+
+--neovide
+-- Set padding
+vim.g.neovide_padding_top = 10
+vim.g.neovide_padding_bottom = 10
+vim.g.neovide_padding_right = 10
+vim.g.neovide_padding_left = 10
+
+-- Set transparency
+vim.g.neovide_transparency = 0.95
+
+--background colour
+vim.cmd('highlight Normal guibg=#171717')
+
+-- Set font
+vim.opt.guifont = "MesloLGS Nerd Font:h14"
+
+--ctrl+shift+v paste
+vim.api.nvim_set_keymap('n', '<C-S-v>', '"+p', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<C-S-v>', '"+p', { noremap = true, silent = true })
