@@ -1,160 +1,133 @@
+--nvtoby
+--The greatest neovim config ever made
+
 -- vim-plug
 vim.cmd [[
   call plug#begin('~/.config/nvim/plugged')
 
-  Plug 'nvim-lua/plenary.nvim' " don't forget to add this one if you don't have it yet!
+  Plug 'nvim-lua/plenary.nvim'
   Plug 'ThePrimeagen/harpoon'
-  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
   Plug 'ellisonleao/gruvbox.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'williamboman/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/nvim-cmp'
   Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-buffer'
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v4.x'}
+  Plug 'github/copilot.vim'
 
   call plug#end()
 ]]
 
---general setup
+-- General setup
 vim.g.mapleader = " "
-
 vim.g.maplocalleader = ' '
 
-vim.g.have_nerd_font = false
-
 vim.opt.number = true
-
 vim.opt.mouse = 'a'
-
 vim.opt.showmode = true
-
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
-
--- Enable break indent
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.breakindent = true
-
--- Save undo history
 vim.opt.undofile = true
-
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-
 vim.opt.signcolumn = 'yes'
-
 vim.opt.updatetime = 250
-
 vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
 vim.opt.inccommand = 'split'
-
 vim.opt.cursorline = true
-
---scrolloff
 vim.opt.scrolloff = 4
 
+-- Netrw
+vim.keymap.set("n", "<leader>pf", vim.cmd.Ex)
 
---netrw
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+--terminal
+vim.api.nvim_set_keymap('n', '<leader>t', ':split | terminal<CR>i', { noremap = true, silent = true })
 
---telescope
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Telescope find files' })
-
--- theme
+-- Theme
 function Colour(color)
 	color = color or "gruvbox"
 	vim.cmd.colorscheme(color)
-
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
-Colour()
-
---treesitter
+-- Treesitter
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the listed parsers MUST always be installed)
   ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
-
   highlight = {
     enable = true,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
 }
 
---harpoon
+-- Harpoon
 local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
-
 vim.keymap.set("n", "<leader>py", mark.add_file)
 vim.keymap.set("n", "<leader>ph", ui.toggle_quick_menu)
 
---mason
+-- Mason
 require("mason").setup()
 
---lsp-zero
-local lsp_zero = require('lsp-zero')
+-- nvim-cmp setup
+local cmp = require 'cmp'
 
--- lsp_attach is where you enable features that only work
--- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
-
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
-
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+cmp.setup({
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'buffer' },
+  },
 })
 
---neovide
--- Set padding
+-- lsp-zero setup
+local lsp_zero = require('lsp-zero')
+
+local servers = {
+  'pyright',  -- Example for Python
+  -- Add other servers as needed
+}
+
+local lsp_attach = function(client, bufnr)
+  local opts = { buffer = bufnr }
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+  -- Add other key mappings as needed
+end
+
+for _, server in ipairs(servers) do
+  require('lspconfig')[server].setup {
+    on_attach = lsp_attach,
+    capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  }
+end
+
+-- Finalize lsp-zero setup
+lsp_zero.setup()
+
+-- Neovide settings
 vim.g.neovide_padding_top = 10
 vim.g.neovide_padding_bottom = 10
 vim.g.neovide_padding_right = 10
 vim.g.neovide_padding_left = 10
+vim.g.neovide_transparency = 0.90
+--vim.cmd('highlight Normal guibg=#181818')
+vim.opt.guifont = "MesloLGS NF:h11"
 
--- Set transparency
-vim.g.neovide_transparency = 0.95
-
---background colour
-vim.cmd('highlight Normal guibg=#171717')
-
--- Set font
-vim.opt.guifont = "MesloLGS Nerd Font:h14"
-
---ctrl+shift+v paste
+-- Ctrl+Shift+V paste
 vim.api.nvim_set_keymap('n', '<C-S-v>', '"+p', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<C-S-v>', '"+p', { noremap = true, silent = true })
+
+-- Set colorscheme
+Colour()
