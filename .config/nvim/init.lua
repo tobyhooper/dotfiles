@@ -4,11 +4,9 @@
 -- vim-plug
 vim.cmd [[
   call plug#begin('~/.config/nvim/plugged')
-
+  Plug 'folke/tokyonight.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'ThePrimeagen/harpoon'
-  Plug 'ellisonleao/gruvbox.nvim'
-  Plug 'no-clown-fiesta/no-clown-fiesta.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'williamboman/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
@@ -17,6 +15,7 @@ vim.cmd [[
   Plug 'hrsh7th/cmp-buffer'
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v4.x'}
   Plug 'github/copilot.vim'
+  Plug 'tpope/vim-commentary'
 
   call plug#end()
 ]]
@@ -52,7 +51,7 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':split | terminal<CR>i', { noremap = 
 
 -- Theme
 function Colour(color)
-	color = color or "no-clown-fiesta"
+	color = color or "tokyonight-night"
 	vim.cmd.colorscheme(color)
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
@@ -132,4 +131,3 @@ vim.api.nvim_set_keymap('v', '<C-S-v>', '"+p', { noremap = true, silent = true }
 
 -- Set colorscheme
 Colour()
-vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#1e1e1e', fg = '#ffffff' })
