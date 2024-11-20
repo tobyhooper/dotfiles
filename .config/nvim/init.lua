@@ -4,7 +4,7 @@
 -- vim-plug
 vim.cmd [[
   call plug#begin('~/.config/nvim/plugged')
-  Plug 'folke/tokyonight.nvim'
+  Plug 'aktersnurra/no-clown-fiesta.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'ThePrimeagen/harpoon'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -47,11 +47,11 @@ vim.opt.scrolloff = 4
 vim.keymap.set("n", "<leader>pf", vim.cmd.Ex)
 
 --terminal
-vim.api.nvim_set_keymap('n', '<leader>t', ':split | terminal<CR>i', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>t', ':vsplit | terminal<CR>i', { noremap = true, silent = true })
 
 -- Theme
 function Colour(color)
-	color = color or "tokyonight-night"
+	color = color or "no-clown-fiesta"
 	vim.cmd.colorscheme(color)
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
@@ -59,7 +59,7 @@ end
 
 -- Treesitter
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+  ensure_installed = {},
   sync_install = false,
   auto_install = true,
   highlight = {
@@ -122,7 +122,7 @@ vim.g.neovide_padding_right = 10
 vim.g.neovide_padding_left = 10
 vim.g.neovide_transparency = 0.90
 --vim.cmd('highlight Normal guibg=#181818')
-vim.opt.guifont = "MesloLGS NF:h11"
+vim.opt.guifont = "JetBrainsMono Nerd Font:h12"
 
 -- Ctrl+Shift+V paste
 vim.api.nvim_set_keymap('n', '<C-S-v>', '"+p', { noremap = true, silent = true })
