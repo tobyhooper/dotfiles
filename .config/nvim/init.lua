@@ -4,7 +4,7 @@
 -- vim-plug
 vim.cmd [[
   call plug#begin('~/.config/nvim/plugged')
-  Plug 'aktersnurra/no-clown-fiesta.nvim'
+  Plug 'shaunsingh/solarized.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'ThePrimeagen/harpoon'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -51,7 +51,7 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':vsplit | terminal<CR>i', { noremap =
 
 -- Theme
 function Colour(color)
-	color = color or "no-clown-fiesta"
+	color = color or "solarized"
 	vim.cmd.colorscheme(color)
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
