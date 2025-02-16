@@ -1,0 +1,10 @@
+# font
+font-family = "JetBrainsMono Nerd Font"
+font-size = 16
+
+# background
+background-opacity = 0.80
+background-blur = true
+
+# theme
+theme = "Builtin Solarized Dark"
