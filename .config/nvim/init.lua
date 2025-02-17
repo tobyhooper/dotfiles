@@ -1,4 +1,3 @@
---nvtoby
 --The greatest neovim config ever made
 
 -- vim-plug
@@ -23,7 +22,6 @@ vim.cmd [[
 -- General setup
 vim.g.mapleader = " "
 vim.g.maplocalleader = ' '
-
 vim.opt.number = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = true
@@ -94,8 +92,7 @@ cmp.setup({
 local lsp_zero = require('lsp-zero')
 
 local servers = {
-  'pyright',  -- Example for Python
-  -- Add other servers as needed
+  'pyright',
 }
 
 local lsp_attach = function(client, bufnr)
@@ -112,7 +109,6 @@ for _, server in ipairs(servers) do
   }
 end
 
--- Finalize lsp-zero setup
 lsp_zero.setup()
 
 -- Neovide settings
@@ -121,7 +117,8 @@ vim.g.neovide_padding_bottom = 10
 vim.g.neovide_padding_right = 10
 vim.g.neovide_padding_left = 10
 vim.g.neovide_transparency = 0.90
---vim.cmd('highlight Normal guibg=#181818')
+
+-- GUI Font
 vim.opt.guifont = "JetBrainsMono Nerd Font:h12"
 
 -- Ctrl+Shift+V paste
@@ -129,5 +126,5 @@ vim.api.nvim_set_keymap('n', '<C-S-v>', '"+p', { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-S-v>', '<C-r>+', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<C-S-v>', '"+p', { noremap = true, silent = true })
 
--- Set colorscheme
+-- Apply theme
 Colour()
