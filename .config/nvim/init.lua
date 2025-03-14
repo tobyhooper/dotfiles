@@ -3,7 +3,7 @@
 -- vim-plug
 vim.cmd [[
   call plug#begin('~/.config/nvim/plugged')
-  Plug 'shaunsingh/solarized.nvim'
+  Plug 'ellisonleao/gruvbox.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'ThePrimeagen/harpoon'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -49,7 +49,7 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':vsplit | terminal<CR>i', { noremap =
 
 -- Theme
 function Colour(color)
-	color = color or "solarized"
+	color = color or "gruvbox"
 	vim.cmd.colorscheme(color)
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
