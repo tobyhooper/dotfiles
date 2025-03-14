@@ -1,8 +1,0 @@
-[window]
-padding.x = 10
-padding.y = 10
-opacity = 0.95
-
-[font] 
-normal.family = "JetBrainsMono Nerd Font"
-size = 11
